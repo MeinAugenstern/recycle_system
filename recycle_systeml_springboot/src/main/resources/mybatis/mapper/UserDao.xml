@@ -108,4 +108,9 @@
       Phone = #{phone,jdbcType=VARCHAR}
     where User_ID = #{userId,jdbcType=INTEGER}
   </update>
+  <update id="updatePhoneByPrimaryKey">
+    update user
+    set Phone = #{phone,jdbcType=VARCHAR}
+    where User_ID = #{userId,jdbcType=INTEGER}
+  </update>
 </mapper>

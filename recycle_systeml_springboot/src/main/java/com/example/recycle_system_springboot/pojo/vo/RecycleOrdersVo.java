@@ -13,11 +13,9 @@ public class RecycleOrdersVo  {
 
     private String collectorName;
 
-    private Date scheduledTime;
+    private String scheduledTime;
 
-    private Date finishedTime;
+    private String finishedTime;
 
     private String phone;
-
-    private List<RecycleOrdersDetailVo> recycleOrdersDetailVoList;
 }

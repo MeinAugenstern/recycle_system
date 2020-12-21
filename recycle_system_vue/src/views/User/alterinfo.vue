@@ -10,7 +10,7 @@
       </div>
       <div style="margin: 20px">
       <div>真实姓名：{{userRealname}}</div><div style="position: relative; top:-18px;left:600px">手机号：{{phone}}</div>
-        <div style="position: relative; top:-38px;left:-430px"><el-button style="float: right; padding: 3px 0"  icon="el-icon-edit-outline" @click="modifyPhone()"></el-button></div>
+        <div style="position: relative; top:-38px;left:-430px"><el-button style="float: right; padding: 3px 0"  icon="el-icon-edit-outline" @click="modifyPhone(phone)"></el-button></div>
       </div>
     </div>
   </el-card>
@@ -20,10 +20,9 @@
         <span>{{scope.$index + 1}}</span>
       </template>
     </el-table-column>
-
     <el-table-column prop="addressDetails" label="地址" width="600">
-  </el-table-column>
-    <el-table-column fixed="right" label="操作">
+    </el-table-column>
+    <el-table-column  fixed="right" label="操作">
       <template slot-scope="scope">
         <el-button  type="primary" round slot="reference" icon="el-icon-edit-outline" style="background-color: #B3C0D1;
         border-color: #B3C0D1"  @click="modifyData(scope.$index, scope.row)"></el-button>
@@ -38,40 +37,39 @@
 
     <el-dialog title="新增地址" :visible.sync="dialogFormVisible">
       <!-- 在el-dialog中进行嵌套el-form实现弹出表格的效果 -->
-      <el-form :model="form">
+      <el-form :model="form" @submit.native.prevent>
         <el-form-item label="地址" :label-width="formLabelWidth">
-          <el-input v-model="form.addressDetails" auto-complete="off"></el-input>
+          <el-input v-model="form.addressDetails" auto-complete="off" @keyup.enter.native="update"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
         <!-- 设置触发更新的方法 -->
-        <el-button type="primary" @click="update">确 定</el-button>
+        <el-button type="primary"  @click="update">确 定</el-button>
       </div>
     </el-dialog>
-
     <el-dialog :visible.sync="centerDialogVisible">
-      <el-form  :model="editForm">
+      <el-form  :model="editForm" @submit.native.prevent>
         <el-form-item label="修改地址">
-          <el-input v-model="editForm.address"></el-input>
+          <el-input v-model="editForm.addressDetails"  @keyup.enter.native="sumbitEditRow()"></el-input>
         </el-form-item>
       </el-form>
       <div>
         <el-button @click="closeDialog()">取消</el-button>
-        <el-button type="primary" @click="sumbitEditRow()">确定</el-button>
+        <el-button type="primary"  @click="sumbitEditRow()">确定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog :visible.sync="editPhoneVisible">
-      <el-form  :model="editForm">
-        <el-form-item label="修改手机号码">
-          <el-input v-model="editForm.phone"></el-input>
+      <el-form  :model="editForm" :rules="rules" ref="editForm" @submit.prevent.native >
+        <el-form-item label="修改手机号码"  prop="phone2">
+          <el-input v-model="editForm.phone2" @keyup.enter.native="sumbitEditPhone('editForm')"></el-input>
         </el-form-item>
+        <div>
+          <el-button @click="closePhoneDialog()">取消</el-button>
+          <el-button type="primary" @click="sumbitEditPhone('editForm')">确定</el-button>
+        </div>
       </el-form>
-      <div>
-        <el-button @click="closePhoneDialog()">取消</el-button>
-        <el-button type="primary" @click="sumbitEditPhone()">确定</el-button>
-      </div>
     </el-dialog>
   </div>
 </template>
@@ -79,6 +77,7 @@
 <script>
   let _index;
   export default {
+
     created () {
       const _this=this
       axios.get('http://localhost:8181/userAlladdress/'+this.$store.getters.getUserId+'').then(function (resp) {
@@ -91,39 +90,72 @@
       })
     },
     data() {
+      let letterRule = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('输入内容不能为空'));
+        } else{
+          callback();
+        }
+      };
+
       return {
+
           userId:1,
           userName:'yxy',
           userRealname:'杨昕语',
+
           phone:13615787610,
           addressList: [{
             addressDetails:'浙江省杭州市西湖区留和路288号浙江工业大学屏峰校区'
-        }],
-        centerDialogVisible: false,
-        dialogFormVisible: false,
-        formLabelWidth: "80px",
-        // 设置form用于进行添加的时候绑定值
-        form: {},
-        value6: "",
-        currentPage3: 1,
-        currentIndex: "",
-        editDialogVisible: false,
-        editForm: {},
-        editPhoneVisible:false
+          }],
+          centerDialogVisible: false,
+          dialogFormVisible: false,
+          formLabelWidth: "80px",
+          // 设置form用于进行添加的时候绑定值
+          form: {},
+          value6: "",
+          currentPage3: 1,
+          currentIndex: "",
+          editDialogVisible: false,
+          editForm: {
+            phone2:''
+          },
+          editPhoneVisible:false,
+          rules:{
+            phone2:[
+              { required: true, message: '请输入密码', trigger: 'blur' },
+              { min: 11, max: 11, message: '长度需为11', trigger: 'blur' },
+              { validator: letterRule, trigger: 'blur' }
+            ]
+          }
       }
     },
     methods: {
-      modifyPhone() {
+      modifyPhone(phone) {
+        //初始化editForm中的phone2
+        this.editForm.phone2=phone
         this.editPhoneVisible = true
-        console.log("修改电话号码")
+
       },
-      sumbitEditPhone(){
-        this.phone = this.editForm.phone;
-        console.log("新的电话号码",this.phone)
-        this.editPhoneVisible = false;
+      sumbitEditPhone(formName){
+        //改变editForm中的phone2
+        const _this=this
+        this.$refs[formName].validate((valid) => {//检验手机
+          if (valid) {
+            this.phone = this.editForm.phone2;
+            axios.post('http://localhost:8181/userupdatePhone/'+this.userId+'/'+this.phone+'').then(function (resp) {
+              console.log(resp)
+            })
+
+            this.editPhoneVisible = false;
+          }else {
+            _this.$alert('手机输入格式错误','提示')
+          }
+          }
+        )
       },
       closePhoneDialog(){
-        this.editPhoneVisible = false
+        this.editPhoneVisible = false;
       },
 
       handleDelete (index, row) {
@@ -150,18 +182,13 @@
       },
       modifyData(index, row) {
         this.centerDialogVisible = true
-        this.editForm = Object.assign({}, row);//重置对象
+        this.editForm = row;//重置对象
         _index = index;
-        console.log("index的值："+index)
-        console.log("_index的值："+_index)
-        console.log("row的值是：", row)//代表选择的这一行的数据
       },
       sumbitEditRow() {
         let editData = _index;
-        console.log("editData的值"+	this.editForm)
-        this.addressList[editData].addressDetails = this.editForm.address;
+        this.addressList[editData].addressDetails = this.editForm.addressDetails;
         this.centerDialogVisible = false;
-        console.log("对象数组",this.tableData)
       },
       closeDialog(){
         this.centerDialogVisible=false

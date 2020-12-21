@@ -3,6 +3,7 @@ package com.example.recycle_system_springboot.dao;
 import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
+import com.github.pagehelper.Page;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface RecycleOrdersDao {
 
     int updateByPrimaryKey(RecycleOrders record);
 
-    List<RecycleOrdersVo> selectOrderByUserId(Integer userid);
+    Page<RecycleOrdersVo> selectOrderByUserId(Integer userid);
 
-    List<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);
+    Page<DoingOrdersVo> selectDoingOrderByUserId(Integer userid);
 }

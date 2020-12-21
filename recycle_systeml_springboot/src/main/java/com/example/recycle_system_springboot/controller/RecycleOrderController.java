@@ -1,69 +1,41 @@
 package com.example.recycle_system_springboot.controller;
 
 import com.example.recycle_system_springboot.dao.RecycleOrdersDao;
-import com.example.recycle_system_springboot.pojo.entity.RecycleOrders;
 import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.DoingOrdersVoFormatData;
 import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVo;
-import com.example.recycle_system_springboot.pojo.vo.RecycleOrdersVoFormatData;
+import com.example.recycle_system_springboot.service.RecycleOrderService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class RecycleOrderController {
     @Resource
+    RecycleOrderService recycleOrderService;
+
+    @Resource
     RecycleOrdersDao recycleOrdersDao;
 
-    @GetMapping("/userAllorders/{id}")
+    @GetMapping("/userAllorders/{id}/{start}/{limit}")
     @ResponseBody
-    public List<RecycleOrdersVoFormatData> userfindAllOrders(@PathVariable("id") int id){
-        List<RecycleOrdersVo> list = recycleOrdersDao.selectOrderByUserId(id);
-        List<RecycleOrdersVoFormatData> result = new ArrayList<>();
-        for(RecycleOrdersVo r:list){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formats = sdf.format(r.getScheduledTime());
-            String formatf=null;
-            if(r.getFinishedTime()!=null){
-                 formatf = sdf.format(r.getFinishedTime());
-            }
-            RecycleOrdersVoFormatData re = new RecycleOrdersVoFormatData();
-            re.setAddressDetails(r.getAddressDetails());
-            re.setCollectorName(r.getCollectorName());
-            re.setPhone(r.getPhone());
-            re.setRecycleOrderId(r.getRecycleOrderId());
-            re.setScheduledTime(formats);
-            re.setFinishedTime(formatf);
-            re.setRecycleOrdersDetailVoList(r.getRecycleOrdersDetailVoList());
-            result.add(re);
-
-        }
+    public PageInfo<RecycleOrdersVo> userfindAllOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindAllOrders(id,start,limit);
+        return result;
+    }
+    @GetMapping("/userDoingorders/{id}/{start}/{limit}")
+    @ResponseBody
+    public PageInfo<DoingOrdersVo> userfindDoingOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit){
+        PageInfo<DoingOrdersVo> result = recycleOrderService.userfindDoingOrders(id,start,limit);
         return result;
     }
 
-    @GetMapping("/userDoingorders/{id}")
-    @ResponseBody
-    public List<DoingOrdersVoFormatData> userfindDoingOrders(@PathVariable("id") int id){
-        List<DoingOrdersVo> list = recycleOrdersDao.selectDoingOrderByUserId(id);
-        List<DoingOrdersVoFormatData> result = new ArrayList<>();
-        for(DoingOrdersVo d:list){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formats = sdf.format(d.getScheduledTime());
-            DoingOrdersVoFormatData doingOrdersVoFormatData = new DoingOrdersVoFormatData();
-            doingOrdersVoFormatData.setAddressDetails(d.getAddressDetails());
-            doingOrdersVoFormatData.setCollectorName(d.getCollectorName());
-            doingOrdersVoFormatData.setPhone(d.getPhone());
-            doingOrdersVoFormatData.setRecycleOrderId(d.getRecycleOrderId());
-            doingOrdersVoFormatData.setScheduledTime(formats);
-            doingOrdersVoFormatData.setRecycleOrdersDetailVoList(d.getRecycleOrdersDetailVoList());
-            result.add(doingOrdersVoFormatData);
-        }
-        return result;
-    }
+
+
 }

@@ -7,4 +7,5 @@ public class LoginMsg {
     private int identity;
     private int id;
     private String name;
+    private boolean login;
 }

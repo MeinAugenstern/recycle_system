@@ -3,10 +3,13 @@ import Router from 'vue-router'
 import Login from '../views/login'
 import Index from '../views/index'
 import UserLayout from '../views/User/userlayout'
-import HisInorder from '../views/User/hisInorder'
+import AllInorder from '../views/User/allInorder'
 import DoingInorder from '../views/User/doingInorder'
 import Recycle from '../views/User/recycle'
 import AlterInfo from '../views/User/alterinfo'
+import Test from  '../views/User/test'
+import HomePage from '../views/User/homepage'
+import maptest from '../views/User/maptest'
 Vue.use(Router)
 
 export default new Router({
@@ -25,10 +28,16 @@ export default new Router({
     {
       path: '/userlayout',
       component: UserLayout,
+      redirect:"/homepage",
       children: [
         {
-          path: '/hisinorder',
-          component: HisInorder
+          path: '/homepage',
+          component: HomePage
+        },
+
+        {
+          path: '/allinorder',
+          component: AllInorder
         },
         {
           path: '/doinginorder',
@@ -41,6 +50,13 @@ export default new Router({
         {
           path: '/alterinfo',
           component: AlterInfo
+        },
+        {
+          path:'/test',
+          component: Test
+        },{
+          path:'/maptest',
+          component:maptest
         }
       ]
     }

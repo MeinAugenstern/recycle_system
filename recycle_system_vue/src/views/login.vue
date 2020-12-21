@@ -45,7 +45,7 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="medium" :loading="loading" style="width:100%" @click="submitForm('loginForm')">立即登陆</el-button>
+            <el-button type="primary" size="medium"  style="width:100%" @click="submitForm('loginForm')">立即登陆</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -65,7 +65,6 @@
         }
       };
       return {
-        loading: false, //登陆状态
         loginForm:{  // 登陆表单
           username: 'zqy',
           password: '123456',
@@ -92,17 +91,19 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             axios.get('http://localhost:8181/checklogin/'+this.loginForm.identity+'/'+this.loginForm.username+'/'+this.loginForm.password+'').then(function (resp) {
-              if(resp.data!=null){
-                  _this.loading=true;
+              console.log(resp)
+              if(resp.data.login){
                   _this.$store.commit('setUserId',resp.data.id)
+                  _this.$store.commit('setUserName',resp.data.name)
                   _this.$router.push({
                     path:'/userlayout',
                   })
+              }else {
+                _this.$alert('用户名或密码输入错误','提示');
               }
             })
-          } else {
-            _this.$alert('用户名或密码输入格式错误','提示');
-            return false;
+          }else{
+            _this.$alert('用户名或密码格式错误','提示');
           }
         });
       },

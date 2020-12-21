@@ -1,10 +1,16 @@
 <template>
   <div>
-    <el-table :data="tableData">
 
+    <el-table :data="tableData">
       <el-table-column prop="recycleOrderId" label="订单号" width="140">
       </el-table-column>
       <el-table-column prop="scheduledTime" label="预约时间" width="300">
+      </el-table-column>
+      <el-table-column  label="完成时间" width="300">
+        <template slot-scope="scope">
+          <span v-if="scope.row.finishedTime!=null">{{scope.row.finishedTime}}</span>
+          <span v-else>未完成</span>
+        </template>
       </el-table-column>
       <el-table-column prop="collectorName" label="配送员" width="140">
       </el-table-column>
@@ -20,9 +26,7 @@
             </el-table>
             <el-button  type="primary" round slot="reference" >查询订单详情</el-button>
           </el-popover>
-          <el-button  type="primary" round>修改订单</el-button>
         </template>
-
       </el-table-column>
     </el-table>
     <el-pagination
@@ -32,9 +36,7 @@
       :total="total"
       @current-change="page">
     </el-pagination>
-
   </div>
-
 </template>
 
 <script>
@@ -42,7 +44,7 @@
     methods:{
       page(currentPage){
         const _this = this
-        axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/1').then(function(resp){
+        axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/'+currentPage+'/2').then(function(resp){
           console.log(resp)
           _this.tableData = resp.data.list
           _this.pageSize = resp.data.pageSize
@@ -52,7 +54,7 @@
     },
     created () {
       const _this=this;
-      axios.get('http://localhost:8181/userDoingorders/'+_this.$store.getters.getUserId+'/1/1').then(function (resp) {
+      axios.get('http://localhost:8181/userAllorders/'+_this.$store.getters.getUserId+'/1/2').then(function (resp) {
         console.log(resp)
         _this.tableData=resp.data.list
         _this.pageSize = resp.data.pageSize
@@ -66,6 +68,7 @@
         tableData: [{
           recycleOrderId: 1,
           scheduledTime: '12月15日 下午17：00',
+          finishedTime:'12月15日 下午17：10',
           collectorName: '陈南',
           phone:13615787610,
           recycleOrdersDetailVoList:[{
@@ -85,8 +88,30 @@
             quantity: '20KG',
             itemPrice: '0.5元/KG',
           }]
-        },
-        ]
+        }, {
+          recycleOrderId: 2,
+          scheduledTime: '12月15日 下午17：00',
+          finishedTime:'12月15日 下午17：10',
+          collectorName: '陈南',
+          phone:13615787610,
+          perform:[{
+            itemName: '纸板',
+            quantity: '10KG',
+            itemPrice: '1元/KG',
+          }, {
+            itemName: '易拉罐',
+            quantity: '20个',
+            itemPrice: '0.1元/个',
+          }, {
+            itemName: '啤酒瓶',
+            quantity: '5个',
+            itemPrice: '1元/个',
+          }, {
+            itemName: '旧衣服',
+            quantity: '20KG',
+            itemPrice: '0.5元/KG',
+          }]
+        }]
       }
     }
   }
