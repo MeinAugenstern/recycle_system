@@ -19,4 +19,5 @@ public interface RecycleOrderDetailDao {
 
     int updateByPrimaryKey(RecycleOrderDetail record);
 
+    List<RecycleOrdersDetailVo> selectDetailByRecycleOrderId(Integer recycleOrderId);
 }

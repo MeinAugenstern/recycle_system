@@ -7,5 +7,6 @@ import lombok.Data;
 import java.util.List;
 @Data
 public class UserVo extends User {
+    //返回给前端的用户信息类
     private List<AddressVo> addressList;
 }

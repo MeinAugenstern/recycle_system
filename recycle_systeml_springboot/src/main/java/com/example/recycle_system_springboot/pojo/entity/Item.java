@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class Item implements Serializable {
+    //物品实体类
     private Integer itemId;
 
     private Integer itemTypeId;

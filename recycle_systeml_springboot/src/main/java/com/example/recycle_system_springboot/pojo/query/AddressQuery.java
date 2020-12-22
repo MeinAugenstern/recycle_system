@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.List;
 @Data
 public class AddressQuery {
+    //
     private List<String> value;
 
     private String detail;

@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class User implements Serializable {
+    //用户实体类
     private Integer userId;
 
     private String userName;

@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class Admin implements Serializable {
+    //管理员实体类
     private Integer adminId;
 
     private String userName;

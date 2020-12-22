@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RecycleOrdersDetailVo {
+    //返回给前端订单详情信息类
     private String itemName;
 
     private Double itemPrice;

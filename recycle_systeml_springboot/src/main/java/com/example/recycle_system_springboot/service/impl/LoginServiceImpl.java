@@ -3,7 +3,7 @@ package com.example.recycle_system_springboot.service.impl;
 import com.example.recycle_system_springboot.dao.AdminDao;
 import com.example.recycle_system_springboot.dao.CollectorDao;
 import com.example.recycle_system_springboot.dao.UserDao;
-import com.example.recycle_system_springboot.pojo.dto.LoginMsg;
+import com.example.recycle_system_springboot.pojo.vo.LoginMsg;
 import com.example.recycle_system_springboot.pojo.entity.Admin;
 import com.example.recycle_system_springboot.pojo.entity.Collector;
 import com.example.recycle_system_springboot.pojo.entity.User;

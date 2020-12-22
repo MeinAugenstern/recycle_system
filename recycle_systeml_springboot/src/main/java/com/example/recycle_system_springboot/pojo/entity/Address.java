@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class Address implements Serializable {
+    //地址实体类
     private Integer addressId;
 
     private Integer userId;

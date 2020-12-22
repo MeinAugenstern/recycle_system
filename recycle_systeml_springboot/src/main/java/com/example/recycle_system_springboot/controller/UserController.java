@@ -12,6 +12,7 @@ import java.util.List;
 
 @Controller
 public class UserController {
+    //用于查询用户的信息、修改用户的手机号
     @Resource
     UserService userService;
 

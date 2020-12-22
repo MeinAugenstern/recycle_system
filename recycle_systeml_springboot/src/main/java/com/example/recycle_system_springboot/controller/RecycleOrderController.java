@@ -17,6 +17,7 @@ import java.util.List;
 
 @Controller
 public class RecycleOrderController {
+    //用于查询所有订单、正在进行中的订单，其中用到了分页的技术
     @Resource
     RecycleOrderService recycleOrderService;
 
@@ -29,6 +30,7 @@ public class RecycleOrderController {
         PageInfo<RecycleOrdersVo> result =recycleOrderService.userfindAllOrders(id,start,limit);
         return result;
     }
+
     @GetMapping("/userDoingorders/{id}/{start}/{limit}")
     @ResponseBody
     public PageInfo<DoingOrdersVo> userfindDoingOrders(@PathVariable("id") int id,@PathVariable("start") int start, @PathVariable("limit") int limit){

@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 @Data
 public class Collector implements Serializable {
+    //派送员实体类
     private Integer collectorPersonId;
 
     private Integer siteId;

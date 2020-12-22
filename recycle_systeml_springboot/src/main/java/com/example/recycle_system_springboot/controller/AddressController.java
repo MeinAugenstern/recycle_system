@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class AddressController {
+
     @PostMapping("/insertAddress")
     @ResponseBody
     public String insertAddress(@RequestBody AddressQuery a){

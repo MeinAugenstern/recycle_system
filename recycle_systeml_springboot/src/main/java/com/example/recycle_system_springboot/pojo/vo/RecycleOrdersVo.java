@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class RecycleOrdersVo  {
+    //返回给前端所有订单信息类
     private Integer recycleOrderId;
 
     private String addressDetails;
